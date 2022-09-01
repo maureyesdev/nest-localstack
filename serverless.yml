@@ -5,6 +5,13 @@ frameworkVersion: '3'
 plugins:
   - serverless-offline
   - serverless-plugin-typescript
+  - serverless-localstack
+
+custom:
+  localstack:
+    debug: true
+    stages:
+      - local
 
 provider:
   name: aws
