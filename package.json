@@ -19,7 +19,11 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "sls:start": "npx sls offline start"
+    "sls:start": "npx sls offline start",
+    "localstack:deploy": "npx sls deploy --stage local",
+    "localstack:log:groups": "docker container exec sam-localstack-1 awslocal logs describe-log-groups",
+    "localstack:log:streams": "docker container exec sam-localstack-1 awslocal logs describe-log-streams --log-group-name $npm_config_group_name",
+    "localstack:log:events": "docker container exec sam-localstack-1 awslocal logs get-log-events --log-group-name $npm_config_group_name --log-stream-name $npm_config_stream_name"
   },
   "dependencies": {
     "@nestjs/apollo": "^10.0.22",

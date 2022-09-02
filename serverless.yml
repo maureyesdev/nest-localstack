@@ -31,15 +31,6 @@ functions:
           path: /movies/gql
           cors: true
 
-  # movies-jobs:
-  #   handler: ${self:custom.envs.handlersPath}.moviesJobs
-  #   events:
-  #     - sqs:
-  #         arn: 
-  #           Fn::GetAtt:
-  #             - TestQueue
-  #             - Arn
-
 constructs:
   movies-queue:
     type: queue
