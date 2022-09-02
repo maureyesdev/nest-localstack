@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { SqsService } from '../../aws/services/sqs.service';
 import { CreateMovieInput } from '../dto/create-movie.input';
 import { UpdateMovieInput } from '../dto/update-movie.input';
 import { Movie } from '../models/movie.model';
 
 @Injectable()
 export class MoviesService {
+  constructor(private readonly sqsService: SqsService) {}
+
   private readonly movies: Movie[] = [
     { id: 1, title: 'The Shaw shank Redemption' },
     { id: 2, title: 'The Godfather' },
@@ -47,6 +50,17 @@ export class MoviesService {
       const movie = this.movies.find((movie) => movie.id === id);
       this.movies.splice(this.movies.indexOf(movie), 1);
       resolve(movie);
+    });
+  }
+
+  async setMovieJob() {
+    return await this.sqsService.sendMessage({
+      MessageBody: {
+        jobType: 'event',
+        payload: {
+          data: 'movies jobs triggered',
+        },
+      },
     });
   }
 }

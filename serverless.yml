@@ -1,4 +1,4 @@
-service: serverless-example
+service: mau-micro-services
 
 frameworkVersion: '3'
 
@@ -6,12 +6,15 @@ plugins:
   - serverless-offline
   - serverless-plugin-typescript
   - serverless-localstack
+  - serverless-lift
 
 custom:
   localstack:
     debug: true
     stages:
       - local
+  envs:
+    handlersPath: src/aws/utils/lambda-handlers
 
 provider:
   name: aws
@@ -20,10 +23,25 @@ provider:
   region: us-east-1
 
 functions:
-  main:
-    handler: src/aws/utils/lambda-handlers.moviesService
+  movies-service:
+    handler: ${self:custom.envs.handlersPath}.moviesService
     events:
       - http:
           method: any
           path: /movies/gql
           cors: true
+
+  # movies-jobs:
+  #   handler: ${self:custom.envs.handlersPath}.moviesJobs
+  #   events:
+  #     - sqs:
+  #         arn: 
+  #           Fn::GetAtt:
+  #             - TestQueue
+  #             - Arn
+
+constructs:
+  movies-queue:
+    type: queue
+    worker:
+      handler: ${self:custom.envs.handlersPath}.moviesJobs

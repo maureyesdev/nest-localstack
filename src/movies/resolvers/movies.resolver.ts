@@ -22,4 +22,9 @@ export class MoviesResolver {
   getMovie(@Args('id', { type: () => Int }) id: number) {
     return this.moviesService.getOne(id);
   }
+
+  @Mutation(() => Boolean)
+  sendMoviesJob() {
+    return this.moviesService.setMovieJob();
+  }
 }
